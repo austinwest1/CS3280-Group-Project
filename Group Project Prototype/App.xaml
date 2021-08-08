@@ -4,12 +4,6 @@
              xmlns:local="clr-namespace:Group_Project_Prototype"
              StartupUri="Main/MainWindow.xaml">
     <Application.Resources>
-
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="WhistlerBlue.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-
+         
     </Application.Resources>
 </Application>

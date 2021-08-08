@@ -22,36 +22,8 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string UpdateInvoice(int cost, int invoiceNum)
         {
-            try
-            {
-                return "UPDATE Invoices SET TotalCost = " + cost + " WHERE InvoiceNum = " + invoiceNum;
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
-        }
-        /// <summary>
-        /// SQL used to update line items for an invoice.
-        /// </summary>
-        /// <param name="invoiceNum"></param>
-        /// <param name="lineItemNum"></param>
-        /// <param name="itemCode"></param>
-        /// <returns></returns>
-        public string UpdateLineItem(int invoiceNum, int lineItemNum, string itemCode)
-        {
-            try
-            {
-                return "UPDATE LineItems SET ItemCode = '" + itemCode + "' WHERE InvoiceNum = " + invoiceNum + " AND LineItemNum = " + lineItemNum;
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
+            string sql = "UPDATE Invoices SET TotalCost =" + cost + "WHERE InvoiceNum =" + invoiceNum;
+            return sql;
         }
         /// <summary>
         /// SQL used to delete a LineItem entry.
@@ -60,18 +32,10 @@ namespace Group_Project_Prototype.Main
         /// <param name="lineItemNum"></param>
         /// <param name="itemCode"></param>
         /// <returns>SQL string</returns>
-        public string DeleteLineItem(int invoiceNum)
+        public string DeleteLineItem(int invoiceNum, int lineItemNum, char itemCode)
         {
-            try
-            {
-                return "DELETE FROM LineItems WHERE InvoiceNum = " + invoiceNum;
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
+            string sql = "DELETE FROM LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES (" + invoiceNum + "," + lineItemNum + "," + itemCode;
+            return sql;
         }
         /// <summary>
         /// SQL used to delete an invoice.
@@ -80,16 +44,8 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string DeleteInvoice(int invoiceNum)
         {
-            try
-            {
-                return "DELETE FROM Invoices WHERE InvoiceNum = " + invoiceNum;
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
+            string sql = "DELETE FROM Invoices WHERE InvoiceNum =" + invoiceNum;
+            return sql;
         }
         /// <summary>
         /// SQL used to insert a line item.
@@ -98,18 +54,10 @@ namespace Group_Project_Prototype.Main
         /// <param name="lineItemNum"></param>
         /// <param name="itemCode"></param>
         /// <returns>SQL string</returns>
-        public string InsertLineItem(int invoiceNum, int lineItemNum, string itemCode)
+        public string InsertLineItem(int invoiceNum, int lineItemNum, char itemCode)
         {
-            try
-            {
-                return "INSERT INTO LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES (" + invoiceNum + "," + lineItemNum + ", " + "'" + itemCode + "')";
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
+            string sql = "INSERT INTO LineItems (InvoiceNum, LineItemNum, ItemCode) VALUES (" + invoiceNum + "," + lineItemNum + "," + itemCode;
+            return sql;
         }
         /// <summary>
         /// SQL used to insert a new invoice.
@@ -117,18 +65,10 @@ namespace Group_Project_Prototype.Main
         /// <param name="date"></param>
         /// <param name="cost"></param>
         /// <returns>SQL string</returns>
-        public string InsertInvoice(string date, string cost)
+        public string InsertInvoice(string date, double cost)
         {
-            try
-            {
-                return "INSERT into Invoices (InvoiceDate, TotalCost) VALUES (#" + date + "#, " + cost + ")";
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
+            string sql = "INSERT into Invoices (InvoiceDate, TotalCost) VALUES (#" + date + "# ," + cost + ")";
+            return sql;
         }
         /// <summary>
         /// SQL used to select an invoice by its number.
@@ -137,17 +77,8 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string SelectInvoiceByNumber(int invoiceNum)
         {
-            try
-            {
-                return "SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum =" + invoiceNum;
-
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
+            string sql = "SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum =" + invoiceNum;
+            return sql;
         }
         /// <summary>
         /// SQL to select all items.
@@ -155,16 +86,8 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string SelectItems()
         {
-            try
-            {
-                return "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
+            string sql = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
+            return sql;
         }
         /// <summary>
         /// SQL used to select a Line Item based on an invoice number.
@@ -173,16 +96,8 @@ namespace Group_Project_Prototype.Main
         /// <returns>SQL string</returns>
         public string SelectLineItem(int invoiceNum)
         {
-            try
-            {
-                return "SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum =" + invoiceNum;
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
+            string sql = "SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum =" + invoiceNum;
+            return sql;
         }
 
     }

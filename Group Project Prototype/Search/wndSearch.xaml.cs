@@ -26,72 +26,17 @@ namespace Group_Project_Prototype.Search
     public partial class wndSearch : Window
     {
         /// <summary>
-        /// objects for classes
-        /// </summary>
-        clsSearchLogic logic = new clsSearchLogic();
-        clsGetInvoiceNumber number = new clsGetInvoiceNumber();
-        clsGetInvoiceCost cost = new clsGetInvoiceCost();
-        Main.clsMainLogic mLogic;
-
-        /// <summary>
         /// initialize the search window
         /// </summary>
-        public wndSearch(Main.clsMainLogic logic)
+        public wndSearch()
         {
-            try
-            {
-                InitializeComponent();
-
-                //call loadInvoices() to fill the grid
-                loadInvoices();
-
-                //call getInvoiceNumber from the getInvoiceNumber class
-                number.getInvoiceNumber();
-
-                //call getInvoiceCost from the getInvoiceCost class
-                cost.getInvoiceCost();
-
-                //fill the comboboxes
-                foreach (clsGetInvoiceNumber.Invoice item in number.numberList)
-                {
-                    cboNumber.Items.Add(item);
-                }
-                foreach (clsGetInvoiceCost.Invoice item in cost.costList)
-                {
-                    cboCharge.Items.Add(item);
-                }
-
-                mLogic = logic;
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
-
+            InitializeComponent();
         }
 
         /// <summary>
-        /// method to call the getInvoiceData() method from the logic class
-        /// and update the data grid
+        /// this is where the selected invoice number will be stored so that the main window can access it.
         /// </summary>
-        private void loadInvoices()
-        {
-            try
-            {
-                logic.getInvoiceData();
-                dgrdInvoices.ItemsSource = null;
-                dgrdInvoices.ItemsSource = logic.invoiceList;
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
-
-        }
+        int invoiceNumber;
 
         /// <summary>
         /// method to handle the select button click event
@@ -104,21 +49,8 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                if (dgrdInvoices.SelectedItem != null)
-                {
-                    //create an Invoice object out of the selected row in the dataGrid
-                    clsSearchLogic.Invoice selectedInvoice = (clsSearchLogic.Invoice)dgrdInvoices.SelectedItem;
-
-                    //convert the invoice number property into an integer
-                    int invoiceNum;
-                    Int32.TryParse(selectedInvoice.number, out invoiceNum);
-
-                    //set the selectedInvoiceNum in Main Window to the number property of the selected row
-                    mLogic.selectedInvoice = invoiceNum;
-
-                    //close this window
-                    this.Close();
-                }
+                //close this window
+                this.Close();
             }
             catch (Exception ex)
             {
@@ -149,11 +81,6 @@ namespace Group_Project_Prototype.Search
             }
         }
 
-        /// <summary>
-        /// method to handle when the window is closed with the x button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try
@@ -181,15 +108,7 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                //set all the filter values to null and reset the combobox text
-                dateStart.SelectedDate = null;
-                dateEnd.SelectedDate = null;
-                cboCharge.SelectedItem = null;
-                cboCharge.Text = "Select Total Charge Amount";
-                cboNumber.SelectedItem = null;
-                cboNumber.Text = "Select Invoice Number";
-                //call getInvoiceData to update the datagrid
-                logic.getInvoiceData();
+
             }
             catch (Exception ex)
             {
@@ -205,26 +124,11 @@ namespace Group_Project_Prototype.Search
         /// </summary>
         /// <param name="sender">sender</param>
         /// <param name="e">event</param>
-        private void cboCharge_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cboNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                //check to see if nothing is selected in the charge combobox
-                if (cboCharge.SelectedItem == null)
-                {
-                    //if that is the case, set the costSelected bool to false in the logic class
-                    logic.costSelected = false;
-                }
-                else
-                {
-                    //if there is something selected, create an invoice object 
-                    //and update the variables in the logic class to show it is selected and what it is
-                    clsGetInvoiceCost.Invoice selectedInvoice = (clsGetInvoiceCost.Invoice)cboCharge.SelectedItem;
-                    logic.cost = selectedInvoice.amount;
-                    logic.costSelected = true;
-                }
 
-                search();
             }
             catch (Exception ex)
             {
@@ -240,22 +144,11 @@ namespace Group_Project_Prototype.Search
         /// </summary>
         /// <param name="sender">sender</param>
         /// <param name="e">event</param>
-        private void cboNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cboCharge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                if (cboNumber.SelectedItem == null)
-                {
-                    logic.invoiceNumberSelected = false;
-                }
-                else
-                {
-                    clsGetInvoiceNumber.Invoice selectedInvoice = (clsGetInvoiceNumber.Invoice)cboNumber.SelectedItem;
-                    logic.invoiceNumber = selectedInvoice.number;
-                    logic.invoiceNumberSelected = true;
-                }
 
-                search();
             }
             catch (Exception ex)
             {
@@ -275,17 +168,7 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                if (dateStart.SelectedDate == null)
-                {
-                    logic.dateStartSelected = false;
-                }
-                else
-                {
-                    logic.dateStart = dateStart.SelectedDate.Value.ToString();
-                    logic.dateStartSelected = true;
-                }
 
-                search();
             }
             catch (Exception ex)
             {
@@ -305,17 +188,7 @@ namespace Group_Project_Prototype.Search
         {
             try
             {
-                if (dateEnd.SelectedDate == null)
-                {
-                    logic.dateEndSelected = false;
-                }
-                else
-                {
-                    logic.dateEnd = dateEnd.SelectedDate.Value.ToString();
-                    logic.dateEndSelected = true;
-                }
 
-                search();
             }
             catch (Exception ex)
             {
@@ -323,38 +196,6 @@ namespace Group_Project_Prototype.Search
                 HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
                             MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        /// <summary>
-        /// method to check to make sure there is a start and end date before calling loadInvoices()
-        /// </summary>
-        private void search()
-        {
-            try
-            {
-                if ((logic.dateStartSelected == true && logic.dateEndSelected == false) || (logic.dateStartSelected == false && logic.dateEndSelected == true))
-                {
-                    lblStart.FontWeight = FontWeights.Bold;
-                    lblStart.Foreground = Brushes.Red;
-                    lblEnd.FontWeight = FontWeights.Bold;
-                    lblEnd.Foreground = Brushes.Red;
-                }
-                else
-                {
-                    lblStart.FontWeight = FontWeights.Normal;
-                    lblStart.Foreground = Brushes.Black;
-                    lblEnd.FontWeight = FontWeights.Normal;
-                    lblEnd.Foreground = Brushes.Black;
-                    loadInvoices();
-                }
-            }
-            catch (Exception ex)
-            {
-                //Just throw the exception
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
-
         }
 
         /// <summary>
